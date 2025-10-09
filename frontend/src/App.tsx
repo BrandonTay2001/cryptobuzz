@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { SocialDominanceChart } from './components/SocialDominanceChart';
+import { HorizontalBarChart } from './components/HorizontalBarChart';
 import { TrendingCoins } from './components/TrendingCoins';
 import { TrendingTopics } from './components/TrendingTopics';
 import { SocialMetrics } from './components/SocialMetrics';
@@ -67,7 +67,7 @@ export default function App() {
 
           {/* Chart Area with Scroll */}
           <div className="flex-1 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-800 scrollbar-track-transparent">
-            <SocialDominanceChart metric={selectedMetric} />
+            <HorizontalBarChart metric={selectedMetric} />
           </div>
         </div>
 

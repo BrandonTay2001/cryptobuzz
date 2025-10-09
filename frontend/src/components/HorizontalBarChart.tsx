@@ -1,21 +1,21 @@
 import { useState } from 'react';
 import { motion } from 'motion/react';
 
-interface CoinData {
+interface ChartData {
   rank: number;
   symbol: string;
   percentage: number;
 }
 
-interface SocialDominanceChartProps {
+interface HorizontalBarChartProps {
   metric: string;
 }
 
-export function SocialDominanceChart({ metric }: SocialDominanceChartProps) {
+export function HorizontalBarChart({ metric }: HorizontalBarChartProps) {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   // Generate 100 coins with realistic distribution
-  const getDataForMetric = (metric: string): CoinData[] => {
+  const getDataForMetric = (metric: string): ChartData[] => {
     const topCoins = [
       'BTC', 'SOL', 'ETH', 'DOGE', 'DOT', 'XRP', 'MATIC', 'LTC', 'ADA', 'BCH',
       'LINK', 'ATOM', 'ICP', 'LUNA', 'IKT', 'ETC', 'MST', 'XLM', 'HNM', 'BNB',
@@ -30,7 +30,7 @@ export function SocialDominanceChart({ metric }: SocialDominanceChartProps) {
     ];
 
     // Generate percentages with exponential decay
-    const baseData: CoinData[] = topCoins.map((symbol, index) => {
+    const baseData: ChartData[] = topCoins.map((symbol, index) => {
       let percentage: number;
       if (index === 0) percentage = 27.18;
       else if (index === 1) percentage = 16.24;
@@ -51,12 +51,12 @@ export function SocialDominanceChart({ metric }: SocialDominanceChartProps) {
       };
     });
 
-    // Vary slightly for different metrics
+    // Vary slightly for different metrics with consistent offsets
     if (metric !== 'twitter') {
-      const variation = metric === 'reddit' ? 0.15 : metric === 'telegram' ? 0.2 : 0.1;
+      const multiplier = metric === 'reddit' ? 0.92 : metric === 'telegram' ? 0.88 : metric === 'discord' ? 0.95 : 0.90;
       return baseData.map(item => ({
         ...item,
-        percentage: item.percentage * (1 - variation + Math.random() * variation * 2),
+        percentage: item.percentage * multiplier,
       }));
     }
     
@@ -290,13 +290,13 @@ export function SocialDominanceChart({ metric }: SocialDominanceChartProps) {
 
   return (
     <div className="space-y-1">
-      {data.map((coin, index) => {
-        const isTop5 = coin.rank <= 5;
-        const widthPercentage = (coin.percentage / maxPercentage) * 100;
+      {data.map((item, index) => {
+        const isTop5 = item.rank <= 5;
+        const widthPercentage = (item.percentage / maxPercentage) * 100;
 
         return (
           <motion.div
-            key={`${metric}-${coin.symbol}`}
+            key={`${metric}-${item.symbol}`}
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: index * 0.01 }}
@@ -307,21 +307,21 @@ export function SocialDominanceChart({ metric }: SocialDominanceChartProps) {
             <div className="flex items-center gap-3 text-xs">
               {/* Rank */}
               <span className={`w-5 text-right ${
-                coin.rank === 1 ? 'text-yellow-400' :
-                coin.rank === 2 ? 'text-cyan-400' :
-                coin.rank === 3 ? 'text-purple-400' :
-                coin.rank === 4 ? 'text-orange-400' :
-                coin.rank === 5 ? 'text-emerald-400' :
+                item.rank === 1 ? 'text-yellow-400' :
+                item.rank === 2 ? 'text-cyan-400' :
+                item.rank === 3 ? 'text-purple-400' :
+                item.rank === 4 ? 'text-orange-400' :
+                item.rank === 5 ? 'text-emerald-400' :
                 'text-gray-600'
               }`}>
-                {coin.rank}
+                {item.rank}
               </span>
 
               {/* Symbol */}
               <span className={`w-12 ${
                 isTop5 ? 'text-white' : 'text-gray-400'
               }`}>
-                {coin.symbol}
+                {item.symbol}
               </span>
 
               {/* Bar Container */}
@@ -329,19 +329,17 @@ export function SocialDominanceChart({ metric }: SocialDominanceChartProps) {
                 {/* Background track - full width dark bar */}
                 <div className="absolute inset-0 bg-gray-900/40 rounded-sm" />
                 
-                {/* Animated Bar */}
-                <motion.div
+                {/* Bar */}
+                <div
                   className={`absolute left-0 top-0 h-full rounded-sm overflow-hidden ${
                     isTop5 
-                      ? getBarColorForRank(coin.rank)
+                      ? getBarColorForRank(item.rank)
                       : 'bg-yellow-500/70'
                   }`}
-                  initial={{ width: 0 }}
-                  animate={{ width: `${widthPercentage}%` }}
-                  transition={{ duration: 0.8, delay: index * 0.01 }}
+                  style={{ width: `${widthPercentage}%` }}
                 >
                   {/* Unique effect for each top 5 rank */}
-                  {isTop5 && getEffectForRank(coin.rank)}
+                  {isTop5 && getEffectForRank(item.rank)}
 
                   {/* Hover shine effect for non-top 5 bars */}
                   {hoveredIndex === index && !isTop5 && (
@@ -355,24 +353,24 @@ export function SocialDominanceChart({ metric }: SocialDominanceChartProps) {
                       }}
                     />
                   )}
-                </motion.div>
+                </div>
               </div>
 
               {/* Percentage */}
               <motion.span
                 className={`w-14 text-right ${
-                  coin.rank === 1 ? 'text-yellow-400' :
-                  coin.rank === 2 ? 'text-cyan-400' :
-                  coin.rank === 3 ? 'text-purple-400' :
-                  coin.rank === 4 ? 'text-orange-400' :
-                  coin.rank === 5 ? 'text-emerald-400' :
+                  item.rank === 1 ? 'text-yellow-400' :
+                  item.rank === 2 ? 'text-cyan-400' :
+                  item.rank === 3 ? 'text-purple-400' :
+                  item.rank === 4 ? 'text-orange-400' :
+                  item.rank === 5 ? 'text-emerald-400' :
                   'text-gray-500'
                 }`}
                 animate={{
                   scale: hoveredIndex === index ? 1.1 : 1,
                 }}
               >
-                {coin.percentage.toFixed(2)}%
+                {item.percentage.toFixed(2)}%
               </motion.span>
             </div>
 
@@ -383,37 +381,37 @@ export function SocialDominanceChart({ metric }: SocialDominanceChartProps) {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 10 }}
                 className={`absolute left-20 top-6 bg-gray-800 border px-2 py-1 rounded text-xs z-20 whitespace-nowrap pointer-events-none ${
-                  coin.rank === 1 ? 'border-yellow-400' :
-                  coin.rank === 2 ? 'border-cyan-400' :
-                  coin.rank === 3 ? 'border-purple-400' :
-                  coin.rank === 4 ? 'border-orange-400' :
-                  coin.rank === 5 ? 'border-emerald-400' :
+                  item.rank === 1 ? 'border-yellow-400' :
+                  item.rank === 2 ? 'border-cyan-400' :
+                  item.rank === 3 ? 'border-purple-400' :
+                  item.rank === 4 ? 'border-orange-400' :
+                  item.rank === 5 ? 'border-emerald-400' :
                   'border-yellow-400'
                 }`}
               >
                 <div className={
-                  coin.rank === 1 ? 'text-yellow-400' :
-                  coin.rank === 2 ? 'text-cyan-400' :
-                  coin.rank === 3 ? 'text-purple-400' :
-                  coin.rank === 4 ? 'text-orange-400' :
-                  coin.rank === 5 ? 'text-emerald-400' :
+                  item.rank === 1 ? 'text-yellow-400' :
+                  item.rank === 2 ? 'text-cyan-400' :
+                  item.rank === 3 ? 'text-purple-400' :
+                  item.rank === 4 ? 'text-orange-400' :
+                  item.rank === 5 ? 'text-emerald-400' :
                   'text-yellow-400'
-                }>#{coin.rank} {coin.symbol}</div>
-                <div className="text-gray-300">{coin.percentage.toFixed(2)}% dominance</div>
+                }>#{item.rank} {item.symbol}</div>
+                <div className="text-gray-300">{item.percentage.toFixed(2)}% dominance</div>
                 {isTop5 && (
                   <div className={`text-xs mt-0.5 ${
-                    coin.rank === 1 ? 'text-yellow-300' :
-                    coin.rank === 2 ? 'text-cyan-300' :
-                    coin.rank === 3 ? 'text-purple-300' :
-                    coin.rank === 4 ? 'text-orange-300' :
-                    coin.rank === 5 ? 'text-emerald-300' :
+                    item.rank === 1 ? 'text-yellow-300' :
+                    item.rank === 2 ? 'text-cyan-300' :
+                    item.rank === 3 ? 'text-purple-300' :
+                    item.rank === 4 ? 'text-orange-300' :
+                    item.rank === 5 ? 'text-emerald-300' :
                     'text-yellow-300'
                   }`}>
-                    {coin.rank === 1 && '👑 #1 King!'}
-                    {coin.rank === 2 && '⚡ #2 Electric!'}
-                    {coin.rank === 3 && '💫 #3 Bubbling!'}
-                    {coin.rank === 4 && '🪙 #4 Bouncing!'}
-                    {coin.rank === 5 && '💚 #5 Pulsing!'}
+                    {item.rank === 1 && '👑 #1 King!'}
+                    {item.rank === 2 && '⚡ #2 Electric!'}
+                    {item.rank === 3 && '💫 #3 Bubbling!'}
+                    {item.rank === 4 && '🪙 #4 Bouncing!'}
+                    {item.rank === 5 && '💚 #5 Pulsing!'}
                   </div>
                 )}
               </motion.div>
