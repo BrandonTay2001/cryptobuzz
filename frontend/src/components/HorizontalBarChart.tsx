@@ -66,201 +66,127 @@ export function HorizontalBarChart({ metric }: HorizontalBarChartProps) {
   const data = getDataForMetric(metric);
   const maxPercentage = Math.max(...data.map(d => d.percentage));
 
-  // Rank 1: Crown/Royal effect with golden sparkles and shimmer
+  // Rank 1: Golden pulsing glow
   const Rank1Effect = () => (
     <>
-      {/* Golden shimmer waves */}
-      <motion.div
-        className="absolute inset-0 bg-gradient-to-r from-yellow-300/40 via-yellow-200/60 to-yellow-300/40"
-        animate={{
-          opacity: [0.3, 0.6, 0.3],
-        }}
-        transition={{
-          duration: 3,
-          repeat: Infinity,
-          ease: 'easeInOut',
+      {/* Pulsing golden glow */}
+      <div className="absolute inset-0 bg-gradient-to-r from-yellow-400/30 via-yellow-300/50 to-yellow-400/30 animate-pulse-glow" />
+      {/* Subtle sparkles */}
+      <div
+        className="absolute w-1 h-1 bg-yellow-200 rounded-full animate-sparkle"
+        style={{
+          left: '30%',
+          top: '40%',
+          boxShadow: '0 0 3px 1px rgba(255, 215, 0, 0.8)',
         }}
       />
-      {/* Crown sparkles - reduced count */}
-      {[...Array(4)].map((_, i) => (
-        <motion.div
-          key={i}
-          className="absolute w-1.5 h-1.5 bg-white rounded-full"
-          style={{
-            left: `${20 + i * 20}%`,
-            top: '50%',
-            boxShadow: '0 0 4px 1px rgba(255, 215, 0, 0.6)',
-          }}
-          animate={{
-            opacity: [0, 1, 0],
-            scale: [0, 1.2, 0],
-            y: [0, -20],
-          }}
-          transition={{
-            duration: 2,
-            repeat: Infinity,
-            delay: i * 0.5,
-            ease: 'easeOut',
-          }}
-        />
-      ))}
+      <div
+        className="absolute w-1 h-1 bg-yellow-200 rounded-full animate-sparkle-delay-1"
+        style={{
+          left: '50%',
+          top: '40%',
+          boxShadow: '0 0 3px 1px rgba(255, 215, 0, 0.8)',
+        }}
+      />
+      <div
+        className="absolute w-1 h-1 bg-yellow-200 rounded-full animate-sparkle-delay-2"
+        style={{
+          left: '70%',
+          top: '40%',
+          boxShadow: '0 0 3px 1px rgba(255, 215, 0, 0.8)',
+        }}
+      />
     </>
   );
 
-  // Rank 2: Lightning/Electric effect with crackling bolts
+  // Rank 2: Cyan electric pulse
   const Rank2Effect = () => (
     <>
-      {/* Electric gradient */}
-      <motion.div
-        className="absolute inset-0 bg-gradient-to-r from-cyan-300/30 via-cyan-200/50 to-cyan-300/30"
-        animate={{
-          opacity: [0.3, 0.5, 0.3],
-        }}
-        transition={{
-          duration: 1.5,
-          repeat: Infinity,
-          ease: 'easeInOut',
+      {/* Pulsing electric glow */}
+      <div className="absolute inset-0 bg-gradient-to-r from-cyan-400/30 via-cyan-300/50 to-cyan-400/30 animate-pulse-glow" />
+      {/* Vertical accent lines */}
+      <div
+        className="absolute h-full w-px bg-cyan-200 animate-pulse-glow"
+        style={{
+          left: '40%',
+          boxShadow: '0 0 4px 1px rgba(100, 255, 255, 0.5)',
         }}
       />
-      {/* Lightning bolts - reduced count */}
-      {[...Array(3)].map((_, i) => (
-        <motion.div
-          key={i}
-          className="absolute h-full w-0.5 bg-white"
-          style={{
-            left: `${30 + i * 20}%`,
-            boxShadow: '0 0 6px 1px rgba(100, 255, 255, 0.6)',
-          }}
-          animate={{
-            opacity: [0, 0.8, 0],
-            scaleY: [0.5, 1, 0.5],
-          }}
-          transition={{
-            duration: 0.6,
-            repeat: Infinity,
-            delay: i * 0.3,
-            repeatDelay: 1.2,
-          }}
-        />
-      ))}
+      <div
+        className="absolute h-full w-px bg-cyan-200 animate-pulse-glow-fast"
+        style={{
+          left: '60%',
+          boxShadow: '0 0 4px 1px rgba(100, 255, 255, 0.5)',
+        }}
+      />
     </>
   );
 
-  // Rank 3: Bubble/Wave effect with rising bubbles
+  // Rank 3: Purple/Pink shimmer
   const Rank3Effect = () => (
     <>
-      {/* Wavy gradient */}
-      <motion.div
-        className="absolute inset-0 bg-gradient-to-r from-purple-300/30 via-pink-300/50 to-purple-300/30"
-        animate={{
-          opacity: [0.3, 0.5, 0.3],
-        }}
-        transition={{
-          duration: 3,
-          repeat: Infinity,
-          ease: 'easeInOut',
+      {/* Pulsing gradient */}
+      <div className="absolute inset-0 bg-gradient-to-r from-purple-400/30 via-pink-300/50 to-purple-400/30 animate-pulse-glow" />
+      {/* Gentle sparkle dots */}
+      <div
+        className="absolute w-1 h-1 bg-pink-200 rounded-full animate-sparkle"
+        style={{
+          left: '25%',
+          top: '50%',
+          boxShadow: '0 0 3px 1px rgba(255, 182, 193, 0.6)',
         }}
       />
-      {/* Rising bubbles - reduced count */}
-      {[...Array(4)].map((_, i) => (
-        <motion.div
-          key={i}
-          className="absolute rounded-full border border-white/50"
-          style={{
-            width: `${6 + (i % 2) * 3}px`,
-            height: `${6 + (i % 2) * 3}px`,
-            left: `${25 + i * 18}%`,
-            bottom: '0',
-            boxShadow: '0 0 4px 1px rgba(255, 255, 255, 0.3)',
-          }}
-          animate={{
-            y: [0, -20],
-            opacity: [0, 0.7, 0],
-            scale: [0.6, 1, 1.1],
-          }}
-          transition={{
-            duration: 2.5,
-            repeat: Infinity,
-            delay: i * 0.6,
-            ease: 'easeOut',
-          }}
-        />
-      ))}
+      <div
+        className="absolute w-1 h-1 bg-pink-200 rounded-full animate-sparkle-delay-1"
+        style={{
+          left: '50%',
+          top: '50%',
+          boxShadow: '0 0 3px 1px rgba(255, 182, 193, 0.6)',
+        }}
+      />
+      <div
+        className="absolute w-1 h-1 bg-pink-200 rounded-full animate-sparkle-delay-2"
+        style={{
+          left: '75%',
+          top: '50%',
+          boxShadow: '0 0 3px 1px rgba(255, 182, 193, 0.6)',
+        }}
+      />
     </>
   );
 
-  // Rank 4: Bouncing coin particles
+  // Rank 4: Orange heat wave
   const Rank4Effect = () => (
     <>
-      {/* Orange glow */}
-      <motion.div
-        className="absolute inset-0 bg-gradient-to-r from-orange-300/30 via-orange-200/50 to-orange-300/30"
-        animate={{
-          opacity: [0.3, 0.5, 0.3],
-        }}
-        transition={{
-          duration: 2,
-          repeat: Infinity,
-          ease: 'easeInOut',
+      {/* Heat wave pulse */}
+      <div className="absolute inset-0 bg-gradient-to-r from-orange-400/30 via-orange-300/50 to-orange-400/30 animate-pulse-glow" />
+      {/* Small glowing embers */}
+      <div
+        className="absolute w-1.5 h-1.5 rounded-full bg-orange-200 animate-sparkle"
+        style={{
+          left: '35%',
+          top: '45%',
+          boxShadow: '0 0 4px 1px rgba(255, 165, 0, 0.6)',
         }}
       />
-      {/* Bouncing coins - reduced count */}
-      {[...Array(3)].map((_, i) => (
-        <motion.div
-          key={i}
-          className="absolute w-2 h-2 rounded-full bg-white/80 border border-orange-300"
-          style={{
-            left: `${30 + i * 20}%`,
-            bottom: '2px',
-            boxShadow: '0 0 4px 1px rgba(255, 180, 0, 0.4)',
-          }}
-          animate={{
-            y: [0, -12, 0],
-            rotate: [0, 180, 360],
-          }}
-          transition={{
-            duration: 1.5,
-            repeat: Infinity,
-            delay: i * 0.5,
-            ease: 'easeInOut',
-          }}
-        />
-      ))}
+      <div
+        className="absolute w-1.5 h-1.5 rounded-full bg-orange-200 animate-sparkle-delay-1"
+        style={{
+          left: '60%',
+          top: '45%',
+          boxShadow: '0 0 4px 1px rgba(255, 165, 0, 0.6)',
+        }}
+      />
     </>
   );
 
-  // Rank 5: Pulse rings effect
+  // Rank 5: Emerald soft pulse
   const Rank5Effect = () => (
     <>
-      {/* Base gradient */}
-      <motion.div
-        className="absolute inset-0 bg-gradient-to-r from-emerald-300/30 via-green-300/50 to-emerald-300/30"
-        animate={{
-          opacity: [0.3, 0.5, 0.3],
-        }}
-        transition={{
-          duration: 2.5,
-          repeat: Infinity,
-          ease: 'easeInOut',
-        }}
-      />
-      {/* Pulsing rings - reduced count */}
-      {[...Array(2)].map((_, i) => (
-        <motion.div
-          key={i}
-          className="absolute inset-0 border border-emerald-200/60 rounded-sm"
-          animate={{
-            opacity: [0.5, 0],
-            scale: [1, 1.08],
-          }}
-          transition={{
-            duration: 2,
-            repeat: Infinity,
-            delay: i * 1,
-            ease: 'easeOut',
-          }}
-        />
-      ))}
+      {/* Gentle emerald pulse */}
+      <div className="absolute inset-0 bg-gradient-to-r from-emerald-400/30 via-green-300/50 to-emerald-400/30 animate-pulse-glow" />
+      {/* Thin ring pulse */}
+      <div className="absolute inset-0 border border-emerald-200/60 rounded-sm animate-pulse-ring" />
     </>
   );
 
@@ -276,7 +202,7 @@ export function HorizontalBarChart({ metric }: HorizontalBarChartProps) {
     }
   };
 
-  // Get bar color based on rank
+  // Get bar color based on rank (base fill)
   const getBarColorForRank = (rank: number) => {
     switch (rank) {
       case 1: return 'bg-gradient-to-r from-yellow-400 to-yellow-500'; // Gold
@@ -287,6 +213,51 @@ export function HorizontalBarChart({ metric }: HorizontalBarChartProps) {
       default: return 'bg-yellow-500/70';
     }
   };
+
+  // Get animated gradient class based on rank (overlay)
+  const getAnimatedGradientForRank = (rank: number) => {
+    switch (rank) {
+      case 1: return 'animated-gradient gradient-gold';
+      case 2: return 'animated-gradient gradient-cyan';
+      case 3: return 'animated-gradient gradient-purple';
+      case 4: return 'animated-gradient gradient-orange';
+      case 5: return 'animated-gradient gradient-emerald';
+      default: return '';
+    }
+  };
+
+  // Get border pulse class based on rank
+  const getPulseClassForRank = (rank: number) => {
+    switch (rank) {
+      case 1: return 'bar-pulse-gold';
+      case 2: return 'bar-pulse-cyan';
+      case 3: return 'bar-pulse-purple';
+      case 4: return 'bar-pulse-orange';
+      case 5: return 'bar-pulse-emerald';
+      default: return '';
+    }
+  };
+
+  // Get sparkler color based on rank
+  const getSparklerColor = (rank: number) => {
+    switch (rank) {
+      case 1: return 'spark-gold';
+      case 2: return 'spark-cyan';
+      case 3: return 'spark-purple';
+      case 4: return 'spark-orange';
+      case 5: return 'spark-emerald';
+      default: return 'spark-gold';
+    }
+  };
+
+  // Sparkler component
+  const Sparkler = ({ color }: { color: string }) => (
+    <div className="absolute" style={{ right: '0', top: '50%', pointerEvents: 'none', transform: 'translateY(-50%)' }}>
+      {[1, 2, 3, 4, 5, 6].map((i) => (
+        <div key={i} className={`spark spark-${i} ${color}`} />
+      ))}
+    </div>
+  );
 
   return (
     <div className="space-y-1">
@@ -331,15 +302,25 @@ export function HorizontalBarChart({ metric }: HorizontalBarChartProps) {
                 
                 {/* Bar */}
                 <div
-                  className={`absolute left-0 top-0 h-full rounded-sm overflow-hidden ${
+                  className={`absolute left-0 top-0 h-full rounded-sm overflow-visible ${
                     isTop5 
-                      ? getBarColorForRank(item.rank)
+                      ? `${getBarColorForRank(item.rank)} ${getPulseClassForRank(item.rank)}`
                       : 'bg-yellow-500/70'
                   }`}
                   style={{ width: `${widthPercentage}%` }}
                 >
+                  {/* Animated gradient sweep overlay for top 5 */}
+                  {isTop5 && (
+                    <div
+                      className={`absolute inset-0 opacity-70 pointer-events-none ${getAnimatedGradientForRank(item.rank)}`}
+                    />
+                  )}
+
                   {/* Unique effect for each top 5 rank */}
                   {isTop5 && getEffectForRank(item.rank)}
+                  
+                  {/* Sparkler at end of bar for top 5 */}
+                  {isTop5 && <Sparkler color={getSparklerColor(item.rank)} />}
 
                   {/* Hover shine effect for non-top 5 bars */}
                   {hoveredIndex === index && !isTop5 && (
@@ -407,10 +388,10 @@ export function HorizontalBarChart({ metric }: HorizontalBarChartProps) {
                     item.rank === 5 ? 'text-emerald-300' :
                     'text-yellow-300'
                   }`}>
-                    {item.rank === 1 && '👑 #1 King!'}
+                    {item.rank === 1 && '👑 #1 Golden!'}
                     {item.rank === 2 && '⚡ #2 Electric!'}
-                    {item.rank === 3 && '💫 #3 Bubbling!'}
-                    {item.rank === 4 && '🪙 #4 Bouncing!'}
+                    {item.rank === 3 && '💫 #3 Shimmering!'}
+                    {item.rank === 4 && '🔥 #4 Heat Wave!'}
                     {item.rank === 5 && '💚 #5 Pulsing!'}
                   </div>
                 )}
