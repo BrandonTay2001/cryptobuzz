@@ -19,6 +19,3 @@ class SantimentUtil:
         result = san.graphql.execute_gql(query)
         jsonList = result[queryType]
         return jsonList
-
-# test = SantimentUtil()
-# print(test.execute_query_by_path('graphql/sentimentWeighted.graphql', 'allProjects'))

@@ -42,7 +42,3 @@ class TwitterUtil:
         payload = {"temporary":False,"modelName":"grok-4-mini-thinking-tahoe","message":message,"fileAttachments":[],"imageAttachments":[],"disableSearch":False,"enableImageGeneration":True,"returnImageBytes":False,"returnRawGrokInXaiRequest":False,"enableImageStreaming":True,"imageGenerationCount":2,"forceConcise":False,"toolOverrides":{},"enableSideBySide":True,"sendFinalMetadata":True,"isReasoning":False,"webpageUrls":[],"disableTextFollowUps":False,"responseMetadata":{"requestModelDetails":{"modelId":"grok-4-mini-thinking-tahoe"}},"disableMemory":False,"forceSideBySide":False,"modelMode":"MODEL_MODE_AUTO","isAsyncChat":False}
         response = requests.post(self.grok_ui_endpoint, headers=headers, json=payload)
         print(response)
-        # print(response.json())
-
-test = TwitterUtil()
-print(test.get_mention_count_grok("币安人生"))

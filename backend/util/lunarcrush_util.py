@@ -17,5 +17,5 @@ class LunarcrushUtil:
         response = requests.get(url, headers=self.headers)
         return response.json()
 
-test = LunarcrushUtil()
-print(test.get_top_creators())
+# test = LunarcrushUtil()
+# print(test.get_top_creators())

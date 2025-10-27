@@ -4,8 +4,8 @@
       filters: [
         {
           metric: "social_volume_total"
-          from: "utc_now-1d"
-          to: "utc_now"
+          from: "utc_now-31d"
+          to: "utc_now-30d"
           aggregation: SUM
           operator: GREATER_THAN
           threshold: 0
@@ -19,8 +19,8 @@
     socialVolume: aggregatedTimeseriesData(
       metric: "social_volume_total"
       aggregation: SUM
-      from: "utc_now-1d"
-      to: "utc_now"
+      from: "utc_now-31d"
+      to: "utc_now-30d"
     )
     percentChange24h
     multichainProjectGroupKey
