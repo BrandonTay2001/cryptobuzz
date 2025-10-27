@@ -1,0 +1,28 @@
+{
+  allProjects(
+    selector: {
+      filters: [
+        {
+          metric: "social_volume_total"
+          from: "utc_now-1d"
+          to: "utc_now"
+          aggregation: SUM
+          operator: GREATER_THAN
+          threshold: 0
+        }
+      ]
+    }
+  ) {
+    slug
+    name
+    ticker
+    socialVolume: aggregatedTimeseriesData(
+      metric: "social_volume_total"
+      aggregation: SUM
+      from: "utc_now-1d"
+      to: "utc_now"
+    )
+    percentChange24h
+    multichainProjectGroupKey
+  }
+}

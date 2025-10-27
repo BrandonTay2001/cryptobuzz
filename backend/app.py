@@ -1,0 +1,30 @@
+from flask import Flask
+from flask_cors import CORS
+from routes.news import news_bp
+from routes.metrics import metrics_bp
+from routes.aggregates import aggregates_bp
+
+def create_app():
+    app = Flask(__name__)
+    
+    # Enable CORS for frontend communication
+    CORS(app)
+    
+    # Register blueprints
+    app.register_blueprint(news_bp, url_prefix='/news')
+    app.register_blueprint(metrics_bp, url_prefix='/metrics')
+    app.register_blueprint(aggregates_bp, url_prefix='/aggregates')
+    
+    @app.route('/')
+    def health_check():
+        return {
+            'status': 'ok',
+            'message': 'CryptoBuzz Backend API',
+            'version': '1.0.0'
+        }
+    
+    return app
+
+if __name__ == '__main__':
+    app = create_app()
+    app.run(debug=True, host='0.0.0.0', port=5001)

@@ -1,0 +1,22 @@
+{
+  allProjects(
+    selector: {
+      orderBy: {
+        metric: "sentiment_weighted_total"
+        from: "utc_now-31d"
+        to: "utc_now-30d"
+        direction: DESC
+      }
+      pagination: { page: 1, pageSize: 100 }
+    }
+  ) {
+    slug
+    name
+    ticker
+    sentimentWeighted: aggregatedTimeseriesData(
+      metric: "sentiment_weighted_total"
+      from: "utc_now-31d"
+      to: "utc_now-30d"
+    )
+  }
+}
