@@ -20,7 +20,7 @@ class CoinmarketcapUtil:
     def get_fear_and_greed_index(self):
         url = f"{self.root}/v3/fear-and-greed/latest"
         response = requests.get(url, headers=self.headers)
-        return {'value': response.json()['data']['value']}
+        return {'value': response.json()['data']['value'], 'classification': response.json()['data']['value_classification']}
     
     def get_trending_topics(self):
         response = requests.post(self.community_topics_url, headers=self.non_authenticated_headers, json={})
@@ -32,4 +32,4 @@ class CoinmarketcapUtil:
         return response.json()['data']['list']
 
 # test = CoinmarketcapUtil()
-# print(test.get_trending_topics())
+# print(test.get_fear_and_greed_index())
