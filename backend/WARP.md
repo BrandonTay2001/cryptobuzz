@@ -96,6 +96,44 @@ The `aggregates` collection stores daily cryptocurrency market data collected vi
    }
    ```
 
+### News Collection
+
+The `news` collection stores cryptocurrency news articles collected from CoinDesk RSS feed.
+
+**Collection Name:** `news`
+
+**Document Structure:**
+```json
+{
+  "_id": "ObjectId",
+  "data_type": "string",     // Type of data: "top_news_articles"
+  "data": "array",           // Array of news articles
+  "count": "number",         // Number of articles
+  "timestamp": "datetime"    // UTC timestamp when data was collected
+}
+```
+
+**Data Types:**
+
+1. **top_news_articles** (from CoinDesk RSS)
+   ```json
+   {
+     "data_type": "top_news_articles",
+     "data": [
+       {
+         "title": "Bitcoin ETF Approval Expected",
+         "paraphrased_title": "Bitcoin ETF Gets Green Light",
+         "link": "https://coindesk.com/...",
+         "published": "Mon, 01 Jan 2024 12:00:00 GMT",
+         "summary": "Article summary...",
+         "importance_score": 8
+       }
+     ],
+     "count": 10,
+     "timestamp": "2024-01-01T00:00:00Z"
+   }
+   ```
+
 ## Batch Job Structure
 
 The aggregates system uses a batch job architecture for data collection:
@@ -141,10 +179,13 @@ Empty dictionaries `{}` are returned for data types that don't exist, ensuring c
 - `GET /aggregates/getTrendingTopics` - Collects and stores trending topics data  
 - `GET /aggregates/getFearAndGreed` - Collects and stores fear and greed index data
 - `GET /aggregates/getTotalSocialVolume` - Collects and stores social volume data from Twitter
+- `GET /news/fetchNews` - Collects and stores top news articles from CoinDesk RSS
 
 #### Data Retrieval Endpoints (Frontend Use)
 - `GET /aggregates/getLatest` - Returns latest data for all aggregate types
 - `GET /aggregates/` - Health check endpoint
+- `GET /news/getLatest` - Returns latest news articles data
+- `GET /news/` - Health check endpoint
 
 ## Development Guidelines
 

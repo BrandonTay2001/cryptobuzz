@@ -170,12 +170,3 @@ Provide only the paraphrased headline, nothing else. Limit the paraphrased headl
         except Exception as e:
             print(f"Error in get_top_news_articles: {e}")
             return []
-
-test = CoindeskRSSUtil()
-articles = test.get_top_news_articles()
-for article in articles:
-    print(f"Original: {article['title']}")
-    print(f"Paraphrased: {article['paraphrased_title']}")
-    print(f"Score: {article['importance_score']}")
-    print(f"Link: {article['link']}")
-    print("---")
