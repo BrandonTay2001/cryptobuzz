@@ -16,15 +16,7 @@ def get_mongodb_connection():
 
 aggregates_bp = Blueprint('aggregates', __name__)
 
-@aggregates_bp.route('/')
-def aggregates_index():
-    """Aggregates API endpoint"""
-    return jsonify({
-        'message': 'Aggregates API endpoint',
-        'status': 'ok'
-    })
-
-@aggregates_bp.route('/getTrendingCoins')
+@aggregates_bp.route('/fetchTrendingCoins', methods=['POST'])
 def get_trending_coins():
     """Get top 5 trending coins from CoinGecko and store in MongoDB"""
     try:
@@ -37,8 +29,7 @@ def get_trending_coins():
         document = {
             'data_type': 'trending_coins',
             'data': top_5_coins,
-            'count': len(top_5_coins),
-            'timestamp': datetime.utcnow()
+            'timestamp': datetime.now()
         }
         collection.insert_one(document)
         
@@ -52,7 +43,7 @@ def get_trending_coins():
             'message': str(e)
         }), 500
 
-@aggregates_bp.route('/getTrendingTopics')
+@aggregates_bp.route('/fetchTrendingTopics', methods=['POST'])
 def get_trending_topics():
     """Get top 5 trending topics from CoinMarketCap and store in MongoDB"""
     try:
@@ -65,8 +56,7 @@ def get_trending_topics():
         document = {
             'data_type': 'trending_topics',
             'data': top_5_topics,
-            'count': len(top_5_topics),
-            'timestamp': datetime.utcnow()
+            'timestamp': datetime.now()
         }
         collection.insert_one(document)
         
@@ -80,7 +70,7 @@ def get_trending_topics():
             'message': str(e)
         }), 500
 
-@aggregates_bp.route('/getFearAndGreed')
+@aggregates_bp.route('/fetchFearAndGreed', methods=['POST'])
 def get_fear_and_greed():
     """Get current fear and greed index with classification from CoinMarketCap and store in MongoDB"""
     try:
@@ -92,7 +82,7 @@ def get_fear_and_greed():
         document = {
             'data_type': 'fear_and_greed_index',
             'data': fear_and_greed_data,
-            'timestamp': datetime.utcnow()
+            'timestamp': datetime.now()
         }
         collection.insert_one(document)
         
@@ -180,7 +170,7 @@ def get_latest():
             'message': str(e)
         }), 500
 
-@aggregates_bp.route('/getTotalSocialVolume')
+@aggregates_bp.route('/fetchTotalSocialVolume', methods=['POST'])
 def get_total_social_volume():
     """Get total social volume for major crypto terms and store in MongoDB"""
     try:
@@ -195,7 +185,7 @@ def get_total_social_volume():
             'data': {
                 'mention_count': mention_count
             },
-            'timestamp': datetime.utcnow()
+            'timestamp': datetime.now()
         }
         collection.insert_one(document)
         

@@ -11,11 +11,13 @@
           threshold: 0
         }
       ]
+      pagination: { page: 1, pageSize: 200 }
     }
   ) {
     slug
     name
     ticker
+    logoUrl
     socialVolume: aggregatedTimeseriesData(
       metric: "social_volume_total"
       aggregation: SUM

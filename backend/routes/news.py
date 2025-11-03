@@ -22,7 +22,7 @@ def news_index():
         'status': 'ok'
     })
 
-@news_bp.route('/fetchNews')
+@news_bp.route('/fetchNews', methods=['POST'])
 def fetch_news():
     """Get top 10 news articles from CoinDesk RSS and store in MongoDB"""
     try:

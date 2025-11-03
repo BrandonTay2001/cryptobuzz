@@ -2,19 +2,20 @@
   allProjects(
     selector: {
       orderBy: {
-        metric: "sentiment_weighted_total"
+        metric: "social_dominance_twitter"
         from: "utc_now-31d"
         to: "utc_now-30d"
         direction: DESC
       }
-      pagination: { page: 1, pageSize: 100 }
+      pagination: { page: 1, pageSize: 120 }
     }
   ) {
     slug
     name
     ticker
-    sentimentWeighted: aggregatedTimeseriesData(
-      metric: "sentiment_weighted_total"
+    logoUrl
+    socialDominance: aggregatedTimeseriesData(
+      metric: "social_dominance_twitter"
       from: "utc_now-31d"
       to: "utc_now-30d"
     )

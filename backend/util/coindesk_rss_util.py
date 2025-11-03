@@ -118,7 +118,7 @@ Original headline: {article['title']}
 
 Provide a paraphrased version that provides all the necessary information in the original headline as a short sentence.
 
-Provide only the paraphrased headline, nothing else. Limit the paraphrased headline to 7 words or less."""
+Provide only the paraphrased headline, nothing else. Limit the paraphrased headline to 7 words or less. Don't add full stops at the end."""
 
                 response = self.openai_client.chat.completions.create(
                     model=self.model,
