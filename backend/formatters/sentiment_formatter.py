@@ -10,10 +10,17 @@ class SentimentFormatter:
         for data in data_list:
             for item in data:
                 if item['ticker'] not in cache:
+                    coinmarketcap_id = item.get('coinmarketcapId')
+                    coinmarketcap_link = (
+                        f'https://coinmarketcap.com/currencies/{coinmarketcap_id}/'
+                        if coinmarketcap_id else None
+                    )
+                    
                     cache[item['ticker']] = {
                         'ticker': item['ticker'],
                         'name': item['name'],
                         'logoUrl': item['logoUrl'],
+                        'coinmarketcapLink': coinmarketcap_link,
                         'sentiment_scores': []
                     }
                 cache[item['ticker']]['sentiment_scores'].append(item['sentimentWeighted'])
@@ -28,6 +35,7 @@ class SentimentFormatter:
                 'ticker': info['ticker'],
                 'name': info['name'],
                 'logoUrl': info['logoUrl'],
+                'coinmarketcapLink': info['coinmarketcapLink'],
                 'sentiment': avg_sentiment_weighted,
                 'absoluteSentiment': abs_sentiment
             })

@@ -17,6 +17,7 @@
     slug
     name
     ticker
+    coinmarketcapId
     logoUrl
     socialVolume: aggregatedTimeseriesData(
       metric: "social_volume_total"

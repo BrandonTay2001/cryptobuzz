@@ -7,10 +7,17 @@ class SocialScoreFormatter:
         for data in data_list:
             for item in data:
                 if item['ticker'] not in cache:
+                    coinmarketcap_id = item.get('coinmarketcapId')
+                    coinmarketcap_link = (
+                        f'https://coinmarketcap.com/currencies/{coinmarketcap_id}/'
+                        if coinmarketcap_id else None
+                    )
+                    
                     cache[item['ticker']] = {
                         'ticker': item['ticker'],
                         'name': item['name'],
                         'logoUrl': item['logoUrl'],
+                        'coinmarketcapLink': coinmarketcap_link,
                         'social_scores': []
                     }
                 cache[item['ticker']]['social_scores'].append(item['socialScore'])
@@ -25,6 +32,7 @@ class SocialScoreFormatter:
                 'ticker': info['ticker'],
                 'name': info['name'],
                 'logoUrl': info['logoUrl'],
+                'coinmarketcapLink': info['coinmarketcapLink'],
                 'socialScore': avg_social_scores,
                 'absoluteSocialScore': abs_social_score
             })

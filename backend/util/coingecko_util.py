@@ -17,8 +17,5 @@ class CoingeckoUtil:
         response = requests.get(url, headers=self.headers)
         coin_objects = response.json()['coins']
         return [
-            {'name': coin['item']['name'], 'symbol': coin['item']['symbol'], 'image': coin['item']['thumb']} 
+            {'name': coin['item']['name'], 'symbol': coin['item']['symbol'], 'image': coin['item']['thumb'], 'id': coin['item']['id']} 
             for coin in coin_objects]
-
-# test = CoingeckoUtil()
-# print(test.get_trending_coins())

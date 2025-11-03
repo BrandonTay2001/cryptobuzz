@@ -13,6 +13,7 @@
     slug
     name
     ticker
+    coinmarketcapId
     logoUrl
     socialDominance: aggregatedTimeseriesData(
       metric: "social_dominance_twitter"

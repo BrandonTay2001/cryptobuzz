@@ -13,6 +13,7 @@
     slug
     logoUrl
     name
+    coinmarketcapId
     ticker
     sentimentWeighted: aggregatedTimeseriesData(
       metric: "sentiment_weighted_twitter"

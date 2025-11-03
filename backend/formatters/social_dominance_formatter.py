@@ -3,10 +3,17 @@ class SocialDominanceFormatter:
         formatted_data = []
         total_percentage = 0.0
         for item in data:
+            coinmarketcap_id = item.get('coinmarketcapId')
+            coinmarketcap_link = (
+                f'https://coinmarketcap.com/currencies/{coinmarketcap_id}/'
+                if coinmarketcap_id else None
+            )
+            
             formatted_data.append({
                 'ticker': item['ticker'],
                 'name': item['name'],
                 'logoUrl': item['logoUrl'],
+                'coinmarketcapLink': coinmarketcap_link,
                 'socialDominance': item['socialDominance']
             })
             total_percentage += item['socialDominance']
