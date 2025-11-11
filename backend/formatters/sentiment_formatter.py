@@ -2,10 +2,7 @@ class SentimentFormatter:
     def __init__(self):
         pass
 
-    def format_sentiment_data(self, data_list, num_days):
-        if num_days == 1 and data_list:
-            data_list = [data_list[0]]    # use the latest data only for 1 day
-        
+    def format_sentiment_data(self, data_list):
         cache = {}
         for data in data_list:
             for item in data:

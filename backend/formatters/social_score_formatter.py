@@ -1,8 +1,5 @@
 class SocialScoreFormatter:
-    def format_social_score_data(self, data_list, num_days):
-        if num_days == 1 and data_list:
-            data_list = [data_list[0]]    # use the latest data only for 1 day
-        
+    def format_social_score_data(self, data_list):
         cache = {}
         for data in data_list:
             for item in data:

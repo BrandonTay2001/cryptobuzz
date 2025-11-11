@@ -1,0 +1,24 @@
+{
+  allProjects(
+    selector: {
+      orderBy: {
+        metric: "social_dominance_twitter"
+        from: "utc_now-60d"
+        to: "utc_now-30d"
+        direction: DESC
+      }
+      pagination: { page: 1, pageSize: 120 }
+    }
+  ) {
+    slug
+    name
+    ticker
+    coinmarketcapId
+    logoUrl
+    socialDominance: aggregatedTimeseriesData(
+      metric: "social_dominance_twitter"
+      from: "utc_now-60d"
+      to: "utc_now-30d"
+    )
+  }
+}

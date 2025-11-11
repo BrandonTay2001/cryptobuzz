@@ -1,0 +1,31 @@
+{
+  allProjects(
+    selector: {
+      filters: [
+        {
+          metric: "social_volume_total"
+          from: "utc_now-60d"
+          to: "utc_now-30d"
+          aggregation: SUM
+          operator: GREATER_THAN
+          threshold: 0
+        }
+      ]
+      pagination: { page: 1, pageSize: 200 }
+    }
+  ) {
+    slug
+    name
+    ticker
+    coinmarketcapId
+    logoUrl
+    socialVolume: aggregatedTimeseriesData(
+      metric: "social_volume_total"
+      aggregation: SUM
+      from: "utc_now-60d"
+      to: "utc_now-30d"
+    )
+    percentChange24h
+    multichainProjectGroupKey
+  }
+}

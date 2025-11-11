@@ -1,0 +1,24 @@
+{
+  allProjects(
+    selector: {
+      orderBy: {
+        metric: "sentiment_weighted_twitter"
+        from: "utc_now-60d"
+        to: "utc_now-30d"
+        direction: DESC
+      }
+      pagination: { page: 1, pageSize: 100 }
+    }
+  ) {
+    slug
+    logoUrl
+    name
+    coinmarketcapId
+    ticker
+    sentimentWeighted: aggregatedTimeseriesData(
+      metric: "sentiment_weighted_twitter"
+      from: "utc_now-60d"
+      to: "utc_now-30d"
+    )
+  }
+}

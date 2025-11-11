@@ -11,6 +11,8 @@ import math
 
 load_dotenv()
 
+timespans = ['day', 'week', 'month']
+
 def get_mongodb_connection():
     uri = f"mongodb+srv://cryptobuzzAdmin:{os.getenv('MONGODB_PASSWORD')}@cryptobuzz-cluster.dwu4ywc.mongodb.net/?appName=cryptobuzz-cluster"
     client = MongoClient(uri)
@@ -30,23 +32,25 @@ def metrics_index():
 def fetch_sentiment_weighted():
     """Get sentiment weighted metrics from Santiment and store in MongoDB"""
     santiment_util = SantimentUtil()
-    negatives = santiment_util.get_sentiment_weighted_negatives()
-    positives = santiment_util.get_sentiment_weighted_positives()
-    combined = negatives + positives
 
-    for obj in combined:
-        obj['absoluteSentiment'] = abs(obj['sentimentWeighted'])
-    sorted_combined = sorted(combined, key=lambda x: x['absoluteSentiment'], reverse=True)
-    top_100 = sorted_combined[:100]
+    for timespan in timespans:
+        negatives = santiment_util.get_sentiment_weighted_negatives(timespan)
+        positives = santiment_util.get_sentiment_weighted_positives(timespan)
+        combined = negatives + positives
 
-    # Store in MongoDB
-    collection = get_mongodb_connection()
-    document = {
-        'data_type': 'sentiment_weighted',
-        'data': top_100,
-        'timestamp': datetime.now()
-    }
-    collection.insert_one(document)
+        for obj in combined:
+            obj['absoluteSentiment'] = abs(obj['sentimentWeighted'])
+        sorted_combined = sorted(combined, key=lambda x: x['absoluteSentiment'], reverse=True)
+        top_100 = sorted_combined[:100]
+
+        # Store in MongoDB
+        collection = get_mongodb_connection()
+        document = {
+            'data_type': f'sentiment_weighted_{timespan}',
+            'data': top_100,
+            'timestamp': datetime.now()
+        }
+        collection.insert_one(document)
 
     return jsonify({
         'status': 'success',
@@ -57,29 +61,31 @@ def fetch_sentiment_weighted():
 def fetch_social_score():
     # social score = unique social volume * percentage price change
     santiment_util = SantimentUtil()
-    top_social_volume_and_price_change = santiment_util.get_social_volume_and_price_change()
-
-    filtered = [obj for obj in top_social_volume_and_price_change if obj['socialVolume'] is not None and obj['percentChange24h'] is not None]
-    filtered = filtered[:100]
     
-    # add a social score field and absolute social score field
-    for obj in filtered:
-        if not obj['percentChange24h'] or not obj['socialVolume']:
-            continue
-        obj['percentChange24h'] = float(obj['percentChange24h'])
-        obj['socialScore'] = obj['socialVolume'] * (obj['percentChange24h'] / 100)
-        obj['absoluteSocialScore'] = abs(obj['socialScore'])
+    for timespan in timespans:
+        top_social_volume_and_price_change = santiment_util.get_social_volume_and_price_change(timespan=timespan)
 
-    sorted_by_absolute_social_score = sorted(filtered, key=lambda x: x['absoluteSocialScore'], reverse=True)
+        filtered = [obj for obj in top_social_volume_and_price_change if obj['socialVolume'] is not None and obj['percentChange24h'] is not None]
+        filtered = filtered[:100]
+        
+        # add a social score field and absolute social score field
+        for obj in filtered:
+            if not obj['percentChange24h'] or not obj['socialVolume']:
+                continue
+            obj['percentChange24h'] = float(obj['percentChange24h'])
+            obj['socialScore'] = obj['socialVolume'] * (obj['percentChange24h'] / 100)
+            obj['absoluteSocialScore'] = abs(obj['socialScore'])
 
-    # store in MongoDB
-    collection = get_mongodb_connection()
-    document = {
-        'data_type': 'social_score',
-        'data': sorted_by_absolute_social_score,
-        'timestamp': datetime.now()
-    }
-    collection.insert_one(document)
+        sorted_by_absolute_social_score = sorted(filtered, key=lambda x: x['absoluteSocialScore'], reverse=True)
+
+        # store in MongoDB
+        collection = get_mongodb_connection()
+        document = {
+            'data_type': f'social_score_{timespan}',
+            'data': sorted_by_absolute_social_score,
+            'timestamp': datetime.now()
+        }
+        collection.insert_one(document)
     return jsonify({
         'status': 'success',
         'message': 'Social score metrics fetched and stored successfully'
@@ -88,19 +94,21 @@ def fetch_social_score():
 @metrics_bp.route('/fetchSocialDominance', methods=['POST'])
 def fetch_social_dominance():
     santiment_util = SantimentUtil()
-    social_dominance = santiment_util.get_social_dominance()
 
-    filtered = [obj for obj in social_dominance if obj['logoUrl'] is not None]
-    filtered = filtered[:100]
+    for timespan in timespans:
+        social_dominance = santiment_util.get_social_dominance(timespan)
 
-    # Store in MongoDB
-    collection = get_mongodb_connection()
-    document = {
-        'data_type': 'social_dominance',
-        'data': filtered,
-        'timestamp': datetime.now()
-    }
-    collection.insert_one(document)
+        filtered = [obj for obj in social_dominance if obj['logoUrl'] is not None]
+        filtered = filtered[:100]
+
+        # Store in MongoDB
+        collection = get_mongodb_connection()
+        document = {
+            'data_type': f'social_dominance_{timespan}',
+            'data': filtered,
+            'timestamp': datetime.now()
+        }
+        collection.insert_one(document)
 
     return jsonify({
         'status': 'success',
@@ -112,14 +120,18 @@ def get_sentiment_weighted():
     num_days = request.args.get('days', default=1, type=int)
     collection = get_mongodb_connection()
     sentiment_formatter = SentimentFormatter()
-    cutoff_date = datetime.now() - timedelta(days=num_days)
-    results = collection.find({
-        'data_type': 'sentiment_weighted',
-        'timestamp': {'$gte': cutoff_date},
-    }).sort('timestamp', -1)
 
-    data_list = [r['data'] for r in results]
-    formatted_data, coin_count, total_absolute_sentiment = sentiment_formatter.format_sentiment_data(data_list, num_days)
+    timespan = 'day'
+    if num_days == 1:   timespan = 'day'
+    elif num_days <= 7: timespan = 'week'
+    else:               timespan = 'month'
+    
+    result = collection.find_one({
+        'data_type': f'sentiment_weighted_{timespan}',
+    }, sort=[('timestamp', -1)])
+
+    data_list = [result['data']]
+    formatted_data, coin_count, total_absolute_sentiment = sentiment_formatter.format_sentiment_data(data_list)
     return jsonify({
         'status': 'success',
         'data': formatted_data,
@@ -132,14 +144,18 @@ def get_social_score():
     num_days = request.args.get('days', default=1, type=int)
     collection = get_mongodb_connection()
     social_score_formatter = SocialScoreFormatter()
-    cutoff_date = datetime.now() - timedelta(days=num_days)
-    results = collection.find({
-        'data_type': 'social_score',
-        'timestamp': {'$gte': cutoff_date}
-    }).sort('timestamp', -1)
 
-    data_list = [r['data'] for r in results]
-    formatted_data, coin_count, total_absolute_social_score = social_score_formatter.format_social_score_data(data_list, num_days)
+    timespan = 'day'
+    if num_days == 1:   timespan = 'day'
+    elif num_days <= 7: timespan = 'week'
+    else:               timespan = 'month'
+
+    result = collection.find_one({
+        'data_type': f'social_score_{timespan}',
+    }, sort=[('timestamp', -1)])
+
+    data_list = [result['data']]
+    formatted_data, coin_count, total_absolute_social_score = social_score_formatter.format_social_score_data(data_list)
     return jsonify({
         'status': 'success',
         'data': formatted_data,
@@ -149,10 +165,17 @@ def get_social_score():
 
 @metrics_bp.route('/getSocialDominance')
 def get_social_dominance():
+    num_days = request.args.get('days', default=1, type=int)
     collection = get_mongodb_connection()
     social_dominance_formatter = SocialDominanceFormatter()
+
+    timespan = 'day'
+    if num_days == 1:   timespan = 'day'
+    elif num_days <= 7: timespan = 'week'
+    else:               timespan = 'month'
+
     result = collection.find_one(
-        {'data_type': 'social_dominance'},
+        {'data_type': f'social_dominance_{timespan}'},
         sort=[('timestamp', -1)]
     )
 

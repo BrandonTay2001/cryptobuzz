@@ -20,14 +20,34 @@ class SantimentUtil:
         jsonList = result[queryType]
         return jsonList
 
-    def get_sentiment_weighted_negatives(self):
-        return self.execute_query_by_path('./graphql/sentimentWeightedNegatives.graphql', 'allProjects')
+    def get_sentiment_weighted_negatives(self, timespan='day'):
+        if timespan == 'day':
+            return self.execute_query_by_path('./graphql/sentimentWeightedNegatives.graphql', 'allProjects')
+        elif timespan == 'week':
+             return self.execute_query_by_path('./graphql/sentimentWeightedNegatives_sevenDays.graphql', 'allProjects')
+        else:
+            return self.execute_query_by_path('./graphql/sentimentWeightedNegatives_thirtyDays.graphql', 'allProjects')
     
-    def get_sentiment_weighted_positives(self):
-        return self.execute_query_by_path('./graphql/sentimentWeightedPositives.graphql', 'allProjects')
+    def get_sentiment_weighted_positives(self, timespan='day'):
+        if timespan == 'day':
+            return self.execute_query_by_path('./graphql/sentimentWeightedPositives.graphql', 'allProjects')
+        elif timespan == 'week':
+             return self.execute_query_by_path('./graphql/sentimentWeightedPositives_sevenDays.graphql', 'allProjects')
+        else:
+            return self.execute_query_by_path('./graphql/sentimentWeightedPositives_thirtyDays.graphql', 'allProjects')
     
-    def get_social_volume_and_price_change(self):
-        return self.execute_query_by_path('./graphql/socialVolumeAndPriceChange.graphql', 'allProjects')
+    def get_social_volume_and_price_change(self, timespan='day'):
+        if timespan == 'day':
+            return self.execute_query_by_path('./graphql/socialVolumeAndPriceChange.graphql', 'allProjects')
+        elif timespan == 'week':
+             return self.execute_query_by_path('./graphql/socialVolumeAndPriceChange_sevenDays.graphql', 'allProjects')
+        else:
+            return self.execute_query_by_path('./graphql/socialVolumeAndPriceChange_thirtyDays.graphql', 'allProjects')
 
-    def get_social_dominance(self):
-        return self.execute_query_by_path('./graphql/socialDominance.graphql', 'allProjects')
+    def get_social_dominance(self, timespan='day'):
+        if timespan == 'day':
+            return self.execute_query_by_path('./graphql/socialDominance.graphql', 'allProjects')
+        elif timespan == 'week':
+            return self.execute_query_by_path('./graphql/socialDominance_sevenDays.graphql', 'allProjects')
+        else:
+            return self.execute_query_by_path('./graphql/socialDominance_thirtyDays.graphql', 'allProjects')
