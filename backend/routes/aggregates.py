@@ -133,7 +133,7 @@ def get_latest():
     if latest_topics:
         response_data['trending_topics'] = {
             'data': latest_topics['data'],
-            'count': latest_topics['count'],
+            'count': len(latest_topics['data']),
             'timestamp': latest_topics['timestamp']
         }
     
