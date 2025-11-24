@@ -3,8 +3,8 @@
     selector: {
       orderBy: {
         metric: "sentiment_weighted_twitter"
-        from: "utc_now-31d"
-        to: "utc_now-30d"
+        from: "utc_now-1d"
+        to: "utc_now"
         direction: ASC
       }
       pagination: { page: 1, pageSize: 100 }
@@ -17,8 +17,8 @@
     ticker
     sentimentWeighted: aggregatedTimeseriesData(
       metric: "sentiment_weighted_twitter"
-      from: "utc_now-31d"
-      to: "utc_now-30d"
+      from: "utc_now-1d"
+      to: "utc_now"
     )
   }
 }

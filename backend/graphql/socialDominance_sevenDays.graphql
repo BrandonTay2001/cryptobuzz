@@ -3,8 +3,8 @@
     selector: {
       orderBy: {
         metric: "social_dominance_twitter"
-        from: "utc_now-37d"
-        to: "utc_now-30d"
+        from: "utc_now-7d"
+        to: "utc_now"
         direction: DESC
       }
       pagination: { page: 1, pageSize: 120 }
@@ -17,8 +17,8 @@
     logoUrl
     socialDominance: aggregatedTimeseriesData(
       metric: "social_dominance_twitter"
-      from: "utc_now-37d"
-      to: "utc_now-30d"
+      from: "utc_now-7d"
+      to: "utc_now"
     )
   }
 }
