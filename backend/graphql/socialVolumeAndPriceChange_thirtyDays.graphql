@@ -3,16 +3,24 @@
     selector: {
       filters: [
         {
-          metric: "social_volume_total"
+          metric: "unique_social_volume_twitter_1d"
           from: "utc_now-30d"
           to: "utc_now"
-          aggregation: SUM
+          aggregation: AVG
           operator: GREATER_THAN
           threshold: 0
+        },
+        {
+          metric: "marketcap_usd"
+          aggregation: LAST
+          from: "utc_now-1d"
+          to: "utc_now"
+          operator: GREATER_THAN_OR_EQUAL_TO
+          threshold: 20000000
         }
       ]
       orderBy: {
-        metric: "social_volume_total"
+        metric: "unique_social_volume_twitter_1d"
         from: "utc_now-30d"
         to: "utc_now"
         direction: DESC
@@ -26,8 +34,8 @@
     coinmarketcapId
     logoUrl
     socialVolume: aggregatedTimeseriesData(
-      metric: "social_volume_total"
-      aggregation: SUM
+      metric: "unique_social_volume_twitter_1d"
+      aggregation: AVG
       from: "utc_now-30d"
       to: "utc_now"
     )

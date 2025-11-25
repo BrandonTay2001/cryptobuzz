@@ -1,6 +1,16 @@
 {
   allProjects(
     selector: {
+      filters: [
+        {
+          metric: "marketcap_usd"
+          aggregation: LAST
+          from: "utc_now-1d"
+          to: "utc_now"
+          operator: GREATER_THAN_OR_EQUAL_TO
+          threshold: 20000000
+        }
+      ]
       orderBy: {
         metric: "sentiment_weighted_twitter"
         from: "utc_now-30d"
