@@ -38,8 +38,19 @@ def fetch_sentiment_weighted():
         positives = santiment_util.get_sentiment_weighted_positives(timespan)
         combined = negatives + positives
 
+        ticker_to_obj = {}
+        for obj in combined:
+            ticker = obj['ticker']
+            if ticker in ticker_to_obj:
+                pass
+            else:
+                ticker_to_obj[ticker] = obj
+        combined = list(ticker_to_obj.values())
+
+
         for obj in combined:
             obj['absoluteSentiment'] = abs(obj['sentimentWeighted'])
+            obj['name'] = obj['name'].split(' (')[0].split(' [')[0]
         sorted_combined = sorted(combined, key=lambda x: x['absoluteSentiment'], reverse=True)
         top_100 = sorted_combined[:100]
 
@@ -66,6 +77,17 @@ def fetch_social_score():
         top_social_volume_and_price_change = santiment_util.get_social_volume_and_price_change(timespan=timespan)
 
         filtered = [obj for obj in top_social_volume_and_price_change if obj['socialVolume'] is not None and obj['percentChange24h'] is not None]
+        
+        ticker_to_obj = {}
+        for obj in filtered:
+            ticker = obj['ticker']
+            if ticker in ticker_to_obj:
+                ticker_to_obj[ticker]['socialVolume'] += obj['socialVolume']
+                print(ticker_to_obj[ticker])
+            else:
+                ticker_to_obj[ticker] = obj
+        filtered = list(ticker_to_obj.values())
+
         filtered = filtered[:100]
         
         # add a social score field and absolute social score field
@@ -75,6 +97,7 @@ def fetch_social_score():
             obj['percentChange24h'] = float(obj['percentChange24h'])
             obj['socialScore'] = obj['socialVolume'] * (obj['percentChange24h'] / 100)
             obj['absoluteSocialScore'] = abs(obj['socialScore'])
+            obj['name'] = obj['name'].split(' (')[0].split(' [')[0]
 
         sorted_by_absolute_social_score = sorted(filtered, key=lambda x: x['absoluteSocialScore'], reverse=True)
 
@@ -99,6 +122,20 @@ def fetch_social_dominance():
         social_dominance = santiment_util.get_social_dominance(timespan)
 
         filtered = [obj for obj in social_dominance if obj['logoUrl'] is not None]
+
+        ticker_to_obj = {}
+        for obj in filtered:
+            ticker = obj['ticker']
+            if ticker in ticker_to_obj:
+                ticker_to_obj[ticker]['socialDominance'] += obj['socialDominance']
+                print(ticker_to_obj[ticker])
+            else:
+                ticker_to_obj[ticker] = obj
+        
+        filtered = list(ticker_to_obj.values())
+        for obj in filtered:
+            obj['name'] = obj['name'].split(' (')[0].split(' [')[0]
+
         filtered = filtered[:100]
 
         # Store in MongoDB
