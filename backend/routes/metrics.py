@@ -18,6 +18,11 @@ def get_mongodb_connection():
     client = MongoClient(uri)
     return client['cryptobuzz']['metrics']
 
+def get_mongodb_admin_connection():
+    uri = f"mongodb+srv://cryptobuzzAdmin:{os.getenv('MONGODB_PASSWORD')}@cryptobuzz-cluster.dwu4ywc.mongodb.net/?appName=cryptobuzz-cluster"
+    client = MongoClient(uri)
+    return client['cryptobuzz']['admin']
+
 metrics_bp = Blueprint('metrics', __name__)
 
 @metrics_bp.route('/')
@@ -32,11 +37,16 @@ def metrics_index():
 def fetch_sentiment_weighted():
     """Get sentiment weighted metrics from Santiment and store in MongoDB"""
     santiment_util = SantimentUtil()
+    admin_collection = get_mongodb_admin_connection()
+    blacklist_docs = admin_collection.find({'type': 'blacklist'})
+    blacklist_tickers = [doc['ticker'] for doc in blacklist_docs]
 
     for timespan in timespans:
         negatives = santiment_util.get_sentiment_weighted_negatives(timespan)
         positives = santiment_util.get_sentiment_weighted_positives(timespan)
         combined = negatives + positives
+
+        combined = [obj for obj in combined if obj['ticker'] not in blacklist_tickers]
 
         ticker_to_obj = {}
         for obj in combined:
@@ -72,18 +82,21 @@ def fetch_sentiment_weighted():
 def fetch_social_score():
     # social score = unique social volume * percentage price change
     santiment_util = SantimentUtil()
+    admin_collection = get_mongodb_admin_connection()
+    blacklist_docs = admin_collection.find({'type': 'blacklist'})
+    blacklist_tickers = [doc['ticker'] for doc in blacklist_docs]
     
     for timespan in timespans:
         top_social_volume_and_price_change = santiment_util.get_social_volume_and_price_change(timespan=timespan)
 
         filtered = [obj for obj in top_social_volume_and_price_change if obj['socialVolume'] is not None and obj['percentChange24h'] is not None]
-        
+        filtered = [obj for obj in filtered if obj['ticker'] not in blacklist_tickers]
+
         ticker_to_obj = {}
         for obj in filtered:
             ticker = obj['ticker']
             if ticker in ticker_to_obj:
                 ticker_to_obj[ticker]['socialVolume'] += obj['socialVolume']
-                print(ticker_to_obj[ticker])
             else:
                 ticker_to_obj[ticker] = obj
         filtered = list(ticker_to_obj.values())
@@ -117,18 +130,21 @@ def fetch_social_score():
 @metrics_bp.route('/fetchSocialDominance', methods=['POST'])
 def fetch_social_dominance():
     santiment_util = SantimentUtil()
+    admin_collection = get_mongodb_admin_connection()
+    blacklist_docs = admin_collection.find({'type': 'blacklist'})
+    blacklist_tickers = [doc['ticker'] for doc in blacklist_docs]
 
     for timespan in timespans:
         social_dominance = santiment_util.get_social_dominance(timespan)
 
         filtered = [obj for obj in social_dominance if obj['logoUrl'] is not None]
+        filtered = [obj for obj in filtered if obj['ticker'] not in blacklist_tickers]
 
         ticker_to_obj = {}
         for obj in filtered:
             ticker = obj['ticker']
             if ticker in ticker_to_obj:
                 ticker_to_obj[ticker]['socialDominance'] += obj['socialDominance']
-                print(ticker_to_obj[ticker])
             else:
                 ticker_to_obj[ticker] = obj
         

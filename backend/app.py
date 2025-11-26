@@ -5,6 +5,7 @@ from routes.metrics import metrics_bp
 from routes.aggregates import aggregates_bp
 from routes.exchanges import exchanges_bp
 from routes.twitter import twitter_bp
+from routes.admin import admin_bp
 
 def create_app():
     app = Flask(__name__)
@@ -18,6 +19,7 @@ def create_app():
     app.register_blueprint(aggregates_bp, url_prefix='/aggregates')
     app.register_blueprint(exchanges_bp, url_prefix='/exchanges')
     app.register_blueprint(twitter_bp, url_prefix='/twitter')
+    app.register_blueprint(admin_bp, url_prefix='/admin')
     
     @app.route('/')
     def health_check():
