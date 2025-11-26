@@ -19,4 +19,4 @@ ENV PYTHONUNBUFFERED=1
 EXPOSE 8080
 
 # Run the application with Gunicorn
-CMD ["/bin/sh", "-c", "exec gunicorn --bind :$PORT --workers $(python -c \"import multiprocessing; print(max(1, multiprocessing.cpu_count() * 2 - 1))\") --threads 8 --timeout 0 app:app"]
+CMD exec gunicorn --bind :$PORT --workers 1 --threads 8 --timeout 0 app:app
