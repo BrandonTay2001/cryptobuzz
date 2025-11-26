@@ -8,3 +8,5 @@ tweepy==4.16.0
 xai-sdk==1.2.0
 feedparser==6.0.12
 openai==2.6.1
+gunicorn==23.0.0
+gevent==25.9.1
