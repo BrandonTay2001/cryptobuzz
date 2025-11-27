@@ -1,5 +1,5 @@
 import multiprocessing
 
 bind = "0.0.0.0:5001"
-workers = multiprocessing.cpu_count() * 2 + 1
-worker_class = "gevent"
+workers = multiprocessing.cpu_count() * 2
+# worker_class = "gevent"
