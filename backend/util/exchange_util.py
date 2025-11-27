@@ -6,5 +6,5 @@ class ExchangeUtil:
         # Placeholder for logic to retrieve exchange data for a given ticker
         return [
             {'exchange': 'WEEX', 'link': f'https://www.weex.com/en/register?vipCode=cryptobuzz', 'imageUrl': 'https://www.weex.com/assets/images/aboutWeex/logo_yellow_small1.png'},
-            {'exchange': 'YUBIT', 'link': f'https://pbs.twimg.com/profile_images/1985989059727314944/M0Wc1pY8_400x400.png'},
+            {'exchange': 'YUBIT', 'link': f'https://www.yubit.com/register?inviteCode=CRYPTOBUZZ', 'imageUrl': 'https://i.ibb.co/20VypwVX/photo-2025-11-28-00-59-41.jpg'},
         ]
