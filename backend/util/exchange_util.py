@@ -5,7 +5,6 @@ class ExchangeUtil:
     def get_exchanges_for_ticker(self, ticker):
         # Placeholder for logic to retrieve exchange data for a given ticker
         return [
-            {'exchange': 'Binance', 'link': f'https://www.binance.com/en', 'imageUrl': 'https://www.logo.wine/a/logo/Binance/Binance-Icon-Logo.wine.svg'},
-            {'exchange': 'Coinbase', 'link': f'https://www.coinbase.com/', 'imageUrl': 'https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/coinbase-logo-icon.png'},
-            {'exchange': 'Kucoin', 'link': f'https://www.kucoin.com/', 'imageUrl': 'https://assets.staticimg.com/cms/media/3gfl2DgVUqjJ8FnkC7QxhvPmXmPgpt42FrAqklVMr.png'},
+            {'exchange': 'WEEX', 'link': f'https://www.weex.com/en/register?vipCode=cryptobuzz', 'imageUrl': 'https://www.weex.com/assets/images/aboutWeex/logo_yellow_small1.png'},
+            {'exchange': 'YUBIT', 'link': f'https://pbs.twimg.com/profile_images/1985989059727314944/M0Wc1pY8_400x400.png'},
         ]
